@@ -13,7 +13,7 @@ public class UI_GetName : MonoBehaviour     //для получения имен
     private static extern string getUserNickname();
 
 #else
-            Debug.Log("This is not a WebJL build.");
+
 #endif
 
     [SerializeField] private TMP_InputField _inputField;
@@ -29,12 +29,9 @@ public class UI_GetName : MonoBehaviour     //для получения имен
 
 #if UNITY_WEBGL && !UNITY_EDITOR
         Debug.Log("This is a WebJL build!");
-        //Hello();
-        if (getUserNickname() != null)
-        {
-            _inputField.text = getUserNickname();
-            _name = getUserNickname();
-        }
+        Hello();
+        _inputField.text = getUserNickname();
+        _name = getUserNickname();
         Debug.Log(_name);
 #else
             Debug.Log("This is not a WebJL build.");

@@ -9,14 +9,15 @@ public class NameOnPerson : NetworkBehaviour        // синх и вывод имени на пер
 
     private void Start()
     {
-        if (!isLocalPlayer) return;
-        if (PlayerPrefs.GetString("name") != "")
+        if (isLocalPlayer)
         {
-            _name = PlayerPrefs.GetString("name");
+            if (PlayerPrefs.GetString("name") != "")
+            {
+                _name = PlayerPrefs.GetString("name");
+            }
         }
-    }
-    private void Update()
-    {
+
+        _nameText.text = _name;
         if (!isServer) return;
         RpcSetName(_name);
     }

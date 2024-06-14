@@ -599,7 +599,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &418253993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -831,37 +831,6 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
---- !u!1 &588341481
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 588341482}
-  m_Layer: 0
-  m_Name: JS
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &588341482
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 588341481}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.598126, y: 3.0055907, z: -26.260654}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &593607534
 GameObject:
   m_ObjectHideFlags: 0
@@ -2139,13 +2108,13 @@ MonoBehaviour:
   sendTimeout: 5000
   receiveTimeout: 20000
   noDelay: 1
-  sslEnabled: 0
+  sslEnabled: 1
   sslProtocols: 3072
   sslCertJson: ./cert.json
   port: 7778
   batchSend: 1
   waitBeforeSend: 1
-  clientUseWss: 0
+  clientUseWss: 1
   clientWebsocketSettings:
     ClientPortOption: 0
     CustomClientPort: 0
@@ -2582,7 +2551,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1820039457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3059,7 +3028,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2080549952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3425,7 +3394,6 @@ SceneRoots:
   - {fileID: 1331813217}
   - {fileID: 214829234}
   - {fileID: 170084450}
-  - {fileID: 588341482}
   - {fileID: 2080549953}
   - {fileID: 1820039458}
   - {fileID: 418253996}
