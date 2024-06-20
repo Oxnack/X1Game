@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
@@ -13,8 +11,9 @@ public class CommandColor : NetworkBehaviour   // Вешается на обьект визуального
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                other.gameObject.GetComponent<ColorChanger>().RpcSetColor(_color);
+                other.gameObject.GetComponent<ColorChanger>().SetColor(_color);
             }
         }
     }
 }
+

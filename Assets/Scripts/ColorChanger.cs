@@ -1,29 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using Mirror;
-using System.Runtime.CompilerServices;
-using StarterAssets;
 
 public class ColorChanger : NetworkBehaviour   //¬ешаетс€ на персонажа с коллайдером в материал указываетс€ с цветом тела
 {
     [SerializeField] private Renderer _rend;
-    [SerializeField] private Color _color;
+    [SyncVar] [SerializeField] private Color _color;
 
     private void Start()
     {
         if (!isLocalPlayer) return;
         _color = Color.white;
     }
-    public override void OnStartLocalPlayer()
+    public override void OnStartClient()
     {
-        RpcSetColor(_color);
+        base.OnStartClient();
+        SetRender();
     }
+
+    public void SetRender()
+    {
+        _rend.material.color = _color;
+    }
+
     [ClientRpc]
-    public void RpcSetColor(Color color)
+    public void RpcSetRender()
+    {
+        SetRender();
+    }
+
+    public void SetColor(Color color)
     {
         _color = color;
-        _rend.material.color = color;
+        RpcSetRender();
 
         Debug.Log("ColorChanged");
     }

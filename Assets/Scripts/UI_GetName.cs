@@ -27,17 +27,19 @@ public class UI_GetName : MonoBehaviour     //для получения имен
             _name = PlayerPrefs.GetString("name");
         }
 
-#if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL 
         Debug.Log("This is a WebJL build!");
         Hello();
-        _inputField.text = getUserNickname();
-        _name = getUserNickname();
+        Debug.Log("Unity Get Nickname: " + getUserNickname());
+        if (getUserNickname() != null && getUserNickname() != "")
+        {
+            _inputField.text = getUserNickname();
+            _name = getUserNickname();
+        }
         Debug.Log(_name);
 #else
             Debug.Log("This is not a WebJL build.");
 #endif
-
-
         SaveName();
     }
     public void SaveName()
