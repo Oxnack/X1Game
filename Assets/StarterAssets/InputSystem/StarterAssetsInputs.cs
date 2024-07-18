@@ -20,6 +20,21 @@ namespace StarterAssets
         public bool cursorLocked = true;
         public bool cursorInputForLook = true;
 
+        void Update()
+        {
+            if (Input.GetMouseButtonDown(1)) // При нажатии на правую кнопку мыши
+            {
+                Cursor.visible = false; // Скрываем курсор
+                Cursor.lockState = CursorLockMode.Locked; // Захватываем курсор
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape)) // При нажатии на клавишу ESC
+            {
+                Cursor.visible = true; // Показываем курсор
+                Cursor.lockState = CursorLockMode.None; // Освобождаем курсор
+            }
+        }
+
 #if ENABLE_INPUT_SYSTEM
         public void OnMove(InputValue value)
         {
@@ -64,16 +79,6 @@ namespace StarterAssets
         public void SprintInput(bool newSprintState)
         {
             sprint = newSprintState;
-        }
-
-        private void OnApplicationFocus(bool hasFocus)
-        {
-            SetCursorState(cursorLocked);
-        }
-
-        private void SetCursorState(bool newState)
-        {
-            Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
         }
     }
 

@@ -9,31 +9,28 @@ public class ColorChanger : NetworkBehaviour   //Вешается на персонажа с коллайд
 
     private void Start()
     {
-        if (!isLocalPlayer) return;
-        _color = Color.white;
+        if (isServer) _color = Color.white;
     }
-    public override void OnStartClient()
+    public override void OnStartClient()                   // _rend.material.color
     {
         base.OnStartClient();
-        SetRender();
-    }
-
-    public void SetRender()
-    {
-        _rend.material.color = _color;
-    }
-
-    [ClientRpc]
-    public void RpcSetRender()
-    {
         SetRender();
     }
 
     public void SetColor(Color color)
     {
         _color = color;
-        RpcSetRender();
+        RpcSetRender(color);
+    }
 
-        Debug.Log("ColorChanged");
+    [ClientRpc]
+    private void RpcSetRender(Color color)
+    {
+        _rend.material.color = color;
+    }
+
+    private void SetRender()
+    {
+        _rend.material.color = _color;
     }
 }
