@@ -2,20 +2,32 @@ using UnityEngine;
 using Mirror;
 using Cinemachine;
 
-public class AddCamera : NetworkBehaviour   // длядобавления в синемашину персонажа игрока
+public class AddCamera : NetworkBehaviour   // для добавления в синемашину поицию персонажа игрока
 {
-    private GameObject _PlayerFollowCamera;
     private CinemachineVirtualCamera _cinemachine;
 
-    private void Start()
-    {
-        if (!isLocalPlayer) return;
-        if (_PlayerFollowCamera == null)         //         обьект с машиной
-        {
-            _PlayerFollowCamera = GameObject.FindGameObjectWithTag("PlayerFollowCamera");
-        }
+    private Transform _playerArmTransform;
+    private Transform _robotTransform;
 
-        _cinemachine = _PlayerFollowCamera.GetComponent<CinemachineVirtualCamera>();
-        _cinemachine.Follow = gameObject.transform;             // указываем наш трансформ
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        _playerArmTransform = NetworkClient.localPlayer.gameObject.GetComponent<Transform>().Find("PlayerArmature");
+        _robotTransform = NetworkClient.localPlayer.gameObject.GetComponent<Transform>().Find("Robot");
+
+        _cinemachine = GetComponent<CinemachineVirtualCamera>();
+
+        _cinemachine.Follow = _playerArmTransform;
+    }
+
+    public void PlayerLook()
+    {
+        _cinemachine.Follow = _playerArmTransform;
+    }
+
+    public void RobotLook()
+    {
+        _cinemachine.Follow = _robotTransform;
     }
 }

@@ -10,7 +10,6 @@ public class PlayerSetupScript : NetworkBehaviour
 
     public override void OnStartLocalPlayer()
     {
-        //disable by default on player prefab
         playerInput.enabled = true;
         thirdPersonController.enabled = true;
     }
