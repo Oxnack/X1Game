@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using UnityEngine;
 using Mirror;
+using JetBrains.Annotations;
 
 public class SimpleHttpServer : NetworkBehaviour
 {
@@ -57,20 +58,31 @@ public class SimpleHttpServer : NetworkBehaviour
                     string jsonData = reader.ReadToEnd(); // Читаем тело запроса
                     Debug.Log("Полученные JSON-данные: " + jsonData);
 
-                    CubeData cubeData = JsonConvert.DeserializeObject<CubeData>(jsonData);
+                    MoveData cubeData = JsonConvert.DeserializeObject<MoveData>(jsonData);
 
                     Debug.Log(cubeData.username);
 
-                    if (cubeData.username == "Nick")
+                    PlayerName[] names = FindObjectsOfType<PlayerName>();
+
+                    GameObject player = null;
+
+                    foreach (PlayerName name in names)
                     {
-                        UpdateCubePosition(cubeData.xCubePosition);
+                        if (name.Name == cubeData.username)
+                        {
+                            player = name.gameObject;
+                        }
+                    }
+
+                    if (player != null)
+                    {
+                        MoveRobotCmd(player.GetComponent<RoboMove>(), cubeData.time, cubeData.z, cubeData.x);
                         responseString = "{\"message\": \"JSON file received\"}";
                     }
                     else
                     {
                         responseString = "{\"message\": \"BadNickname\"}";
                     }
-                    // Обновляем позицию куба на сервере
 
 
                 }
@@ -92,9 +104,9 @@ public class SimpleHttpServer : NetworkBehaviour
     }
 
     [Server] // Убедитесь, что этот метод вызывается только на сервере
-    private void UpdateCubePosition(int xPosition)
+    private void MoveRobotCmd(RoboMove roboMove, float time, int z, int x)
     {
-        transform.position = new Vector3(xPosition, 0, 0);
+        roboMove.Move(time, z, x);
     }
 
     private void OnApplicationQuit()
@@ -108,8 +120,10 @@ public class SimpleHttpServer : NetworkBehaviour
 }
 
 [System.Serializable]
-public class CubeData
+public class MoveData
 {
     public string username;
-    public int xCubePosition;
+    public float time;
+    public int z;
+    public int x;
 }
