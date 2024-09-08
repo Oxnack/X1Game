@@ -251,8 +251,8 @@ GameObject:
   m_Component:
   - component: {fileID: 41230623}
   - component: {fileID: 41230622}
-  - component: {fileID: 41230620}
   - component: {fileID: 41230624}
+  - component: {fileID: 41230625}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -260,36 +260,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &41230620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 41230619}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0110f245bfcfc7d459681f7bd9ebc590, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxMessageSize: 16384
-  maxHandshakeSize: 3000
-  serverMaxMsgsPerTick: 10000
-  clientMaxMsgsPerTick: 1000
-  sendTimeout: 5000
-  receiveTimeout: 20000
-  noDelay: 1
-  sslEnabled: 0
-  sslProtocols: 3072
-  sslCertJson: ./cert.json
-  port: 27777
-  batchSend: 1
-  waitBeforeSend: 1
-  clientUseWss: 0
-  clientWebsocketSettings:
-    ClientPortOption: 2
-    CustomClientPort: 443
-  minimumLogLevel: 3
 --- !u!114 &41230622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,7 +281,7 @@ MonoBehaviour:
   autoConnectClientBuild: 0
   offlineScene: Assets/StarterAssets/ThirdPersonController/Scenes/Menu.unity
   onlineScene: Assets/StarterAssets/ThirdPersonController/Scenes/Playground.unity
-  transport: {fileID: 41230620}
+  transport: {fileID: 41230625}
   networkAddress: sv.x1team.ru
   maxConnections: 100
   disconnectInactiveConnections: 0
@@ -322,6 +292,7 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 1975457108487340, guid: ec3e8f3ed27e2244caaedaf589590a03, type: 3}
+  - {fileID: 6530326518842483545, guid: 82d6d7dd63cf942408dc248b5604642f, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -366,6 +337,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offsetX: 0
   offsetY: 0
+--- !u!114 &41230625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41230619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0110f245bfcfc7d459681f7bd9ebc590, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxMessageSize: 16384
+  maxHandshakeSize: 3000
+  serverMaxMsgsPerTick: 10000
+  clientMaxMsgsPerTick: 1000
+  sendTimeout: 5000
+  receiveTimeout: 20000
+  noDelay: 1
+  sslEnabled: 0
+  sslProtocols: 3072
+  sslCertJson: ./cert.json
+  port: 27777
+  batchSend: 1
+  waitBeforeSend: 1
+  clientUseWss: 1
+  clientWebsocketSettings:
+    ClientPortOption: 2
+    CustomClientPort: 443
+  minimumLogLevel: 3
 --- !u!1 &92014594
 GameObject:
   m_ObjectHideFlags: 0

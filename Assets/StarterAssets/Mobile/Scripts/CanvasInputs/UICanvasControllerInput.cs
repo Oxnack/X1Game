@@ -20,6 +20,7 @@ namespace StarterAssets
 
         private void Update()
         {
+            if (isServer) return;
             if (starterAssetsInputs == null)
             {
                 starterAssetsInputs = NetworkClient.localPlayer.gameObject.GetComponent<StarterAssetsInputs>();
