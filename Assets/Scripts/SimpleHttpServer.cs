@@ -21,7 +21,7 @@ public class SimpleHttpServer : NetworkBehaviour
     private void StartServer()
     {
         httpListener = new HttpListener();
-        httpListener.Prefixes.Add("http://webreqest.x1team.ru:8083/"); // Задайте URL и порт
+        httpListener.Prefixes.Add("http://webreqest.x1team.ru:8084/"); // Задайте URL и порт
         httpListener.Start();
         Debug.Log("HTTP Сервер запущен...");
         ListenForRequests();
@@ -125,4 +125,5 @@ public class MoveData
     public float time;
     public int z;
     public int x;
+    public int jump;
 }
