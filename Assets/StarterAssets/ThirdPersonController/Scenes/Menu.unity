@@ -359,7 +359,7 @@ MonoBehaviour:
   sslEnabled: 0
   sslProtocols: 3072
   sslCertJson: ./cert.json
-  port: 7778
+  port: 27777
   batchSend: 1
   waitBeforeSend: 1
   clientUseWss: 1
