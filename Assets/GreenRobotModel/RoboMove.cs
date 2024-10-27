@@ -14,7 +14,7 @@ public class RoboMove : MonoBehaviour
     private IEnumerator MoveHook(float time, int z, int x)
     {
         Rigidbody RoboRb = _robot.GetComponent<Rigidbody>();
-
+        //Assets\GreenRobotModel\RoboMove.cs
         float moveHorizontal = 0;
         float moveVertical = 0;
 

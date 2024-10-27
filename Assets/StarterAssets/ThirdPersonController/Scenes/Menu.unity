@@ -359,14 +359,14 @@ MonoBehaviour:
   sslEnabled: 0
   sslProtocols: 3072
   sslCertJson: ./cert.json
-  port: 27777
+  port: 7778
   batchSend: 1
   waitBeforeSend: 1
   clientUseWss: 1
   clientWebsocketSettings:
     ClientPortOption: 2
     CustomClientPort: 443
-  minimumLogLevel: 3
+  minimumLogLevel: 1
 --- !u!1 &92014594
 GameObject:
   m_ObjectHideFlags: 0
