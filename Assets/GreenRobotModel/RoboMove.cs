@@ -5,13 +5,18 @@ public class RoboMove : MonoBehaviour
 {
     [SerializeField] private GameObject _robot;
     [SerializeField] private float _speed;
+    [SerializeField] private float jumpForce = 5f;
 
-    public void Move(float time, int z, int x)
+    public void Move(float time, int z, int x, int jump)
     {
-        StartCoroutine(MoveHook(time, z, x));
+        StartCoroutine(MoveHook(time, z, x, jump));
     }
 
-    private IEnumerator MoveHook(float time, int z, int x)
+    private void Start() {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    private IEnumerator MoveHook(float time, int z, int x, int jump)
     {
         Rigidbody RoboRb = _robot.GetComponent<Rigidbody>();
         //Assets\GreenRobotModel\RoboMove.cs
@@ -27,6 +32,14 @@ public class RoboMove : MonoBehaviour
         {
             moveVertical = z;
         }
+
+        if (jump == 1) {
+            // Jump();
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+        
+
+        //#####
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical).normalized;
 
