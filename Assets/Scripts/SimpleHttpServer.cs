@@ -12,7 +12,7 @@ public class SimpleHttpServer : NetworkBehaviour
 
     void Start()
     {
-        if (isServer) // Убедитесь, что сервер запускается только на стороне сервера
+        if (isServer)
         {
             StartServer();
         }
@@ -21,9 +21,9 @@ public class SimpleHttpServer : NetworkBehaviour
     private void StartServer()
     {
         httpListener = new HttpListener();
-        httpListener.Prefixes.Add("http://localhost:8084/"); // Задайте URL и порт //webreqest.x1team.ru:80 or 443
+        httpListener.Prefixes.Add("http://localhost:8084/"); // Open URL and addr //webreqest.x1team.ru:80 or 443
         httpListener.Start();
-        Debug.Log("HTTP Сервер запущен...");
+        Debug.Log("HTTP Server Start (Listening)...");
         ListenForRequests();
     }
 
@@ -38,7 +38,7 @@ public class SimpleHttpServer : NetworkBehaviour
             }
             catch (Exception ex)
             {
-                Debug.LogError("Ошибка при обработке запроса: " + ex.Message);
+                Debug.LogError("Error Http Server: " + ex.Message);
             }
         }
     }
@@ -49,13 +49,13 @@ public class SimpleHttpServer : NetworkBehaviour
 
         if (context.Request.HttpMethod == "POST" && context.Request.Url.AbsolutePath == "/api/football")
         {
-            // Проверяем Content-Type для определения типа данных
+            
             if (context.Request.ContentType == "application/json")
             {
                 using (var reader = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding))
                 {
-                    string jsonData = reader.ReadToEnd(); // Читаем тело запроса
-                    Debug.Log("Полученные JSON-данные: " + jsonData);
+                    string jsonData = reader.ReadToEnd();
+                    Debug.Log("received JSON Data: " + jsonData);
 
                     MoveData cubeData = JsonConvert.DeserializeObject<MoveData>(jsonData);
 
@@ -75,7 +75,7 @@ public class SimpleHttpServer : NetworkBehaviour
 
                     if (robo != null)
                     {
-                        MoveRobotCmd(robo.GetComponent<RoboMove>(), cubeData.time, cubeData.z, cubeData.x);
+                        MoveRobotCmd(robo.GetComponent<RoboMove>(), cubeData.time, cubeData.z, cubeData.x, cubedata.jump);
                         responseString = "{\"message\": \"JSON file received\"}";
                     }
                     else
@@ -102,10 +102,10 @@ public class SimpleHttpServer : NetworkBehaviour
         context.Response.OutputStream.Close();
     }
 
-    [Server] // Убедитесь, что этот метод вызывается только на сервере
-    private void MoveRobotCmd(RoboMove roboMove, float time, int z, int x)
+    [Server]
+    private void MoveRobotCmd(RoboMove roboMove, float time, int z, int x, int jump)
     {
-        roboMove.Move(time, z, x);
+        roboMove.Move(time, z, x, jump);
     }
 
     private void OnApplicationQuit()
