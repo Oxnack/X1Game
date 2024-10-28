@@ -6,7 +6,7 @@ public class RoboMove : MonoBehaviour
     [SerializeField] private GameObject _robot;
     [SerializeField] private float _speed;
     [SerializeField] private float jumpForce = 5f;
-
+    Rigidbody rb;
     public void Move(float time, int z, int x, int jump)
     {
         StartCoroutine(MoveHook(time, z, x, jump));

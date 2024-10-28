@@ -75,7 +75,7 @@ public class SimpleHttpServer : NetworkBehaviour
 
                     if (robo != null)
                     {
-                        MoveRobotCmd(robo.GetComponent<RoboMove>(), cubeData.time, cubeData.z, cubeData.x, cubedata.jump);
+                        MoveRobotCmd(robo.GetComponent<RoboMove>(), cubeData.time, cubeData.z, cubeData.x, cubeData.jump);
                         responseString = "{\"message\": \"JSON file received\"}";
                     }
                     else
