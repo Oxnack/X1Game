@@ -12,7 +12,7 @@ public class SimpleHttpServer : NetworkBehaviour
 
     void Start()
     {
-        if (isServer) // ���������, ��� ������ ����������� ������ �� ������� �������
+        if (isServer)
         {
             StartServer();
         }
@@ -21,9 +21,9 @@ public class SimpleHttpServer : NetworkBehaviour
     private void StartServer()
     {
         httpListener = new HttpListener();
-        httpListener.Prefixes.Add("http://localhost:8084/"); // ������� URL � ���� //webreqest.x1team.ru:80 or 443
+        httpListener.Prefixes.Add("http://localhost:8084/"); // Open URL and addr //webreqest.x1team.ru:80 or 443
         httpListener.Start();
-        Debug.Log("HTTP ������ �������...");
+        Debug.Log("HTTP Server Start (Listening)...");
         ListenForRequests();
     }
 
@@ -38,7 +38,7 @@ public class SimpleHttpServer : NetworkBehaviour
             }
             catch (Exception ex)
             {
-                Debug.LogError("������ ��� ��������� �������: " + ex.Message);
+                Debug.LogError("Error Http Server: " + ex.Message);
             }
         }
     }
@@ -49,13 +49,13 @@ public class SimpleHttpServer : NetworkBehaviour
 
         if (context.Request.HttpMethod == "POST" && context.Request.Url.AbsolutePath == "/api/football")
         {
-            // ��������� Content-Type ��� ����������� ���� ������
+            
             if (context.Request.ContentType == "application/json")
             {
                 using (var reader = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding))
                 {
-                    string jsonData = reader.ReadToEnd(); // ������ ���� �������
-                    Debug.Log("���������� JSON-������: " + jsonData);
+                    string jsonData = reader.ReadToEnd();
+                    Debug.Log("received JSON Data: " + jsonData);
 
                     MoveData cubeData = JsonConvert.DeserializeObject<MoveData>(jsonData);
 
