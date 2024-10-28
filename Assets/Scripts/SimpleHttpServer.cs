@@ -21,7 +21,7 @@ public class SimpleHttpServer : NetworkBehaviour
     private void StartServer()
     {
         httpListener = new HttpListener();
-        httpListener.Prefixes.Add("http://webreqest.x1team.ru:8084/"); // Задайте URL и порт
+        httpListener.Prefixes.Add("http://localhost:8084/"); // Задайте URL и порт //webreqest.x1team.ru:80 or 443
         httpListener.Start();
         Debug.Log("HTTP Сервер запущен...");
         ListenForRequests();
