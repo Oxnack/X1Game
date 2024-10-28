@@ -21,7 +21,7 @@ public class SimpleHttpServer : NetworkBehaviour
     private void StartServer()
     {
         httpListener = new HttpListener();
-        httpListener.Prefixes.Add("http://147.45.164.193:8084/"); // Open URL and addr //webreqest.x1team.ru:80 or 443
+        httpListener.Prefixes.Add(":8084/"); // Open URL and addr //webreqest.x1team.ru:80 or 443
         httpListener.Start();
         Debug.Log("HTTP Server Start (Listening)...");
         ListenForRequests();
