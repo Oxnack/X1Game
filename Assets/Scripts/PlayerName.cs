@@ -17,6 +17,8 @@ public class PlayerName : NetworkBehaviour
     [Command]
     private void CmdSetName(string name)
     {
+        Debug.Log("New Robot Name: " + name);
+
         Name = name;
     }
 }
