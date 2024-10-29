@@ -9,6 +9,7 @@ using Mirror;
 public class SimpleHttpServer : NetworkBehaviour
 {
     private HttpListener httpListener;
+    private string _prefix = "http://+:8084/";
 
     void Start()
     {
@@ -21,9 +22,9 @@ public class SimpleHttpServer : NetworkBehaviour
     private void StartServer()
     {
         httpListener = new HttpListener();
-        httpListener.Prefixes.Add("http://+:8086/"); // Open URL and addr //webreqest.x1team.ru:80 or 443
+        httpListener.Prefixes.Add(_prefix); // Open URL and addr //webreqest.x1team.ru:80 or 443
         httpListener.Start();
-        Debug.Log("HTTP Server Start (Listening)...");
+        Debug.Log("HTTP Server Start Listen prefix: " + _prefix + " (Listening)...---------------------------------------------------------------------------------------------------------(httpServ)");
         ListenForRequests();
     }
 
@@ -38,7 +39,7 @@ public class SimpleHttpServer : NetworkBehaviour
             }
             catch (Exception ex)
             {
-                Debug.LogError("Error Http Server: " + ex.Message);
+                Debug.LogError("Error Http Server: " + ex.Message + " ---------------------------------------------------------------------------------------------------------(httpServ)");
             }
         }
     }
