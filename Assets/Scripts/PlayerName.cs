@@ -7,7 +7,7 @@ public class PlayerName : NetworkBehaviour
 
     private void Start()
     {
-        if (isLocalPlayer)
+        if (!isServer)
         {
             Name = PlayerPrefs.GetString("name");
             CmdSetName(Name);
