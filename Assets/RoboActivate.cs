@@ -21,5 +21,6 @@ public class RoboActivate : NetworkBehaviour
     {
         robo.GetComponent<PlayerName>().enabled = true;
         NetworkServer.Spawn(robo);
+        Debug.Log("Spawn New Robot");
     }
 }
