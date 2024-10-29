@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 public class RoboActivate : NetworkBehaviour
 {
     [SerializeField] private GameObject _robotPrefab;
-    private string _name;
+    public string _name;
 
     public override void OnStartClient()
     {
@@ -18,19 +18,11 @@ public class RoboActivate : NetworkBehaviour
         }
     }
 
-    public override void OnStopClient()
-    {
-        base.OnStopClient();
-
-        if (isLocalPlayer)
-        {
-            CmdDestroyRobot(_name);
-        }
-    }
 
     [Command]
     private void CmdSpawnRobot(string name)
     {
+        _name = name;
         GameObject robo = Instantiate(_robotPrefab); 
         NetworkServer.Spawn(robo); 
 
@@ -41,8 +33,7 @@ public class RoboActivate : NetworkBehaviour
         Debug.Log("Spawn New Robot, with name: " + name);
     }
 
-    [Command]
-    private void CmdDestroyRobot(string name)
+    private void OnDestroy()
     {
         PlayerName[] RobotNames = FindObjectsOfType<PlayerName>();
 
@@ -50,7 +41,7 @@ public class RoboActivate : NetworkBehaviour
 
         foreach (PlayerName RobotName in RobotNames)
         {
-            if (RobotName.Name == name)
+            if (RobotName.Name == _name)
             {
                 robo = RobotName.gameObject;
             }
