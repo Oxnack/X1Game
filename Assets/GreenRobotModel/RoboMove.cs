@@ -9,6 +9,7 @@ public class RoboMove : MonoBehaviour
     Rigidbody rb;
     public void Move(float time, int z, int x, int jump)
     {
+        Debug.Log("Move in Robo move has started");
         StartCoroutine(MoveHook(time, z, x, jump));
     }
 

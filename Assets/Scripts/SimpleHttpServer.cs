@@ -77,6 +77,7 @@ public class SimpleHttpServer : NetworkBehaviour
                     if (robo != null)
                     {
                         MoveRobotCmd(robo.GetComponent<RoboMove>(), cubeData.time, cubeData.z, cubeData.x, cubeData.jump);
+                        Debug.Log("robo not null");
                         responseString = "{\"message\": \"JSON file received\"}";
                     }
                     else
@@ -106,6 +107,7 @@ public class SimpleHttpServer : NetworkBehaviour
     [Server]
     private void MoveRobotCmd(RoboMove roboMove, float time, int z, int x, int jump)
     {
+        Debug.Log("MoveRoboCmd Has Started");
         roboMove.Move(time, z, x, jump);
     }
 
