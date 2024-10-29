@@ -62,7 +62,7 @@ namespace Mirror.SimpleWeb
                     while (client.Connected)
                         ReadOneMessage(config, readBuffer);
 
-                    Log.Verbose("[SWT-ReceiveLoop]: {0} Not Connected", conn);
+                    Log.Verbose($"[SWT-ReceiveLoop]: {conn} Not Connected");
                 }
                 catch (Exception)
                 {
@@ -72,24 +72,27 @@ namespace Mirror.SimpleWeb
                 }
             }
             catch (ThreadInterruptedException e) { Log.InfoException(e); }
-            catch (ThreadAbortException) { Log.Error("[SWT-ReceiveLoop]: Thread Abort Exception"); }
+            catch (ThreadAbortException e) { Log.InfoException(e); }
             catch (ObjectDisposedException e) { Log.InfoException(e); }
-            catch (ReadHelperException e) { Log.InfoException(e); }
+            catch (ReadHelperException e)
+            {
+                Log.InfoException(e);
+            }
             catch (SocketException e)
             {
                 // this could happen if wss client closes stream
-                Log.Warn("[SWT-ReceiveLoop]: ReceiveLoop SocketException\n{0}", e.Message);
+                Log.Warn($"[SWT-ReceiveLoop]: ReceiveLoop SocketException\n{e.Message}");
                 queue.Enqueue(new Message(conn.connId, e));
             }
             catch (IOException e)
             {
                 // this could happen if client disconnects
-                Log.Warn("[SWT-ReceiveLoop]: ReceiveLoop IOException\n{0}", e.Message);
+                Log.Warn($"[SWT-ReceiveLoop]: ReceiveLoop IOException\n{e.Message}");
                 queue.Enqueue(new Message(conn.connId, e));
             }
             catch (InvalidDataException e)
             {
-                Log.Error("[SWT-ReceiveLoop]: Invalid data from {0}\n{1}\n{2}\n\n", conn, e.Message, e.StackTrace);
+                Log.Error($"[SWT-ReceiveLoop]: Invalid data from {conn}\n{e.Message}\n{e.StackTrace}\n\n");
                 queue.Enqueue(new Message(conn.connId, e));
             }
             catch (Exception e)
@@ -236,7 +239,7 @@ namespace Mirror.SimpleWeb
 
             // dump after mask off
             Log.DumpBuffer($"[SWT-ReceiveLoop]: Message", buffer, msgOffset, payloadLength);
-            Log.Verbose("[SWT-ReceiveLoop]: Close: {0} message:{1}", GetCloseCode(buffer, msgOffset), GetCloseMessage(buffer, msgOffset, payloadLength));
+            Log.Verbose($"[SWT-ReceiveLoop]: Close: {GetCloseCode(buffer, msgOffset)} message:{GetCloseMessage(buffer, msgOffset, payloadLength)}");
 
             conn.Dispose();
         }

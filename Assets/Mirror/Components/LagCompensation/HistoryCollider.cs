@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace Mirror
 {
-    [DisallowMultipleComponent]
-    [AddComponentMenu("Network/ Lag Compensation/ History Collider")]
     public class HistoryCollider : MonoBehaviour
     {
         [Header("Components")]

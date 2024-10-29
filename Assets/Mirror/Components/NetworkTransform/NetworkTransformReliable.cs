@@ -11,7 +11,6 @@ namespace Mirror
         uint sendIntervalCounter = 0;
         double lastSendIntervalTime = double.MinValue;
 
-        [Header("Additional Settings")]
         [Tooltip("If we only sync on change, then we need to correct old snapshots if more time than sendInterval * multiplier has elapsed.\n\nOtherwise the first move will always start interpolating from the last move sequence's time, which will make it stutter when starting every time.")]
         public float onlySyncOnChangeCorrectionMultiplier = 2;
 
@@ -41,6 +40,8 @@ namespace Mirror
 
         // Used to store last sent snapshots
         protected TransformSnapshot last;
+
+        protected int lastClientCount = 1;
 
         // update //////////////////////////////////////////////////////////////
         void Update()
@@ -121,6 +122,8 @@ namespace Mirror
                     TransformSnapshot computed = TransformSnapshot.Interpolate(from, to, t);
                     Apply(computed, to);
                 }
+
+                lastClientCount = clientSnapshots.Count;
             }
         }
 

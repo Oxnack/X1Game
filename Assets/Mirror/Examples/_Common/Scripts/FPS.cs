@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace Mirror.Examples.Common
 {
-    [AddComponentMenu("")]
     public class FPS : MonoBehaviour
     {
         // fps accessible to the outside
@@ -32,7 +31,7 @@ namespace Mirror.Examples.Common
         {
             if (!showGUI) return;
 
-            GUI.Label(new Rect(Screen.width - 100, 0, 70, 25), $"FPS: {framesPerSecond}");
+            GUI.Label(new Rect(Screen.width - 70, 0, 70, 25), $"FPS: {framesPerSecond}");
         }
     }
 }

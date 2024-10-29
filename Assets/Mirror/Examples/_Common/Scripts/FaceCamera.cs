@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Mirror.Examples.Common
 {
-    [AddComponentMenu("")]
     public class FaceCamera : MonoBehaviour
     {
         // LateUpdate so that all camera updates are finished.

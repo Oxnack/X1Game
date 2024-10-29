@@ -1,7 +1,6 @@
 using UnityEngine;
 using Mirror;
 using Newtonsoft.Json;
-using UnityEngine.Rendering.LookDev;
 
 public class RoboActivate : NetworkBehaviour
 {
@@ -23,9 +22,10 @@ public class RoboActivate : NetworkBehaviour
     {
         base.OnStopClient();
 
-        CmdDestroyRobot(_name);
-        DestroyRobot(_name);
-        Debug.Log("StopClient(RoboActivate)");
+        if (isLocalPlayer)
+        {
+            CmdDestroyRobot(_name);
+        }
     }
 
     [Command]
@@ -43,11 +43,6 @@ public class RoboActivate : NetworkBehaviour
 
     [Command]
     private void CmdDestroyRobot(string name)
-    {
-        DestroyRobot(name);
-    }
-
-    private void DestroyRobot(string name)
     {
         PlayerName[] RobotNames = FindObjectsOfType<PlayerName>();
 
@@ -70,5 +65,6 @@ public class RoboActivate : NetworkBehaviour
         {
             Debug.Log("No Robot to desroy");
         }
+
     }
 }

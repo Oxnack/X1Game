@@ -28,7 +28,6 @@ namespace Mirror
     {
         // get the two states closest to a given timestamp.
         // those can be used to interpolate the exact state at that time.
-        // => RingBuffer: see prediction_ringbuffer_2 branch, but it's slower!
         public static bool Sample<T>(
             SortedList<double, T> history,
             double timestamp, // current server time
@@ -60,36 +59,29 @@ namespace Mirror
             //      should be O(1) most of the time, unless sampling was off.
             int index = 0; // manually count when iterating. easier than for-int loop.
             KeyValuePair<double, T> prev = new KeyValuePair<double, T>();
-
-            // SortedList foreach iteration allocates a LOT. use for-int instead.
-            // foreach (KeyValuePair<double, T> entry in history) {
-            for (int i = 0; i < history.Count; ++i)
-            {
-                double key = history.Keys[i];
-                T value = history.Values[i];
-
+            foreach (KeyValuePair<double, T> entry in history) {
                 // exact match?
-                if (timestamp == key)
+                if (timestamp == entry.Key)
                 {
-                    before = value;
-                    after = value;
+                    before = entry.Value;
+                    after = entry.Value;
                     afterIndex = index;
-                    t = Mathd.InverseLerp(key, key, timestamp);
+                    t = Mathd.InverseLerp(entry.Key, entry.Key, timestamp);
                     return true;
                 }
 
                 // did we check beyond timestamp? then return the previous two.
-                if (key > timestamp)
+                if (entry.Key > timestamp)
                 {
                     before = prev.Value;
-                    after = value;
+                    after = entry.Value;
                     afterIndex = index;
-                    t = Mathd.InverseLerp(prev.Key, key, timestamp);
+                    t = Mathd.InverseLerp(prev.Key, entry.Key, timestamp);
                     return true;
                 }
 
                 // remember the last
-                prev = new KeyValuePair<double, T>(key, value);
+                prev = entry;
                 index += 1;
             }
 
@@ -99,33 +91,22 @@ namespace Mirror
         // inserts a server state into the client's history.
         // readjust the deltas of the states after the inserted one.
         // returns the corrected final position.
-        // => RingBuffer: see prediction_ringbuffer_2 branch, but it's slower!
         public static T CorrectHistory<T>(
-            SortedList<double, T> history,
+            SortedList<double, T> stateHistory,
             int stateHistoryLimit,
             T corrected,     // corrected state with timestamp
             T before,        // state in history before the correction
             T after,         // state in history after the correction
-            int afterIndex)  // index of the 'after' value so we don't need to find it again here
+            int afterIndex) // index of the 'after' value so we don't need to find it again here
             where T: PredictedState
         {
             // respect the limit
             // TODO unit test to check if it respects max size
-            if (history.Count >= stateHistoryLimit)
-            {
-                history.RemoveAt(0);
-                afterIndex -= 1; // we removed the first value so all indices are off by one now
-            }
+            if (stateHistory.Count >= stateHistoryLimit)
+                stateHistory.RemoveAt(0);
 
-            // PERFORMANCE OPTIMIZATION: avoid O(N) insertion, only readjust all values after.
-            // the end result is the same since after.delta and after.position are both recalculated.
-            // it's technically not correct if we were to reconstruct final position from 0..after..end but
-            // we never do, we only ever iterate from after..end!
-            //
-            //   insert the corrected state into the history, or overwrite if already exists
-            //   SortedList insertions are O(N)!
-            //     history[corrected.timestamp] = corrected;
-            //     afterIndex += 1; // we inserted the corrected value before the previous index
+            // insert the corrected state into the history, or overwrite if already exists
+            stateHistory[corrected.timestamp] = corrected;
 
             // the entry behind the inserted one still has the delta from (before, after).
             // we need to correct it to (corrected, after).
@@ -165,27 +146,27 @@ namespace Mirror
             after.rotationDelta        = Quaternion.Slerp(Quaternion.identity, after.rotationDelta, (float)multiplier).normalized;
 
             // changes aren't saved until we overwrite them in the history
-            history[after.timestamp] = after;
+            stateHistory[after.timestamp] = after;
 
             // second step: readjust all absolute values by rewinding client's delta moves on top of it.
             T last = corrected;
-            for (int i = afterIndex; i < history.Count; ++i)
+            for (int i = afterIndex; i < stateHistory.Count; ++i)
             {
-                double key = history.Keys[i];
-                T value = history.Values[i];
+                double key = stateHistory.Keys[i];
+                T entry = stateHistory.Values[i];
 
                 // correct absolute position based on last + delta.
-                value.position        = last.position + value.positionDelta;
-                value.velocity        = last.velocity + value.velocityDelta;
-                value.angularVelocity = last.angularVelocity + value.angularVelocityDelta;
+                entry.position        = last.position + entry.positionDelta;
+                entry.velocity        = last.velocity + entry.velocityDelta;
+                entry.angularVelocity = last.angularVelocity + entry.angularVelocityDelta;
                 // Quaternions always need to be normalized in order to be a valid rotation after operations
-                value.rotation        = (value.rotationDelta * last.rotation).normalized; // quaternions add delta by multiplying in this order
+                entry.rotation        = (entry.rotationDelta * last.rotation).normalized; // quaternions add delta by multiplying in this order
 
                 // save the corrected entry into history.
-                history[key] = value;
+                stateHistory[key] = entry;
 
                 // save last
-                last = value;
+                last = entry;
             }
 
             // third step: return the final recomputed state.

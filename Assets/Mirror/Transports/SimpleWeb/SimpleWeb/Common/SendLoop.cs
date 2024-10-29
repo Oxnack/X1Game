@@ -71,7 +71,7 @@ namespace Mirror.SimpleWeb
                             // check if connected before sending message
                             if (!client.Connected)
                             {
-                                Log.Verbose("[SWT-SendLoop]: SendLoop {0} not connected", conn);
+                                Log.Verbose($"[SWT-SendLoop]: SendLoop {conn} not connected");
                                 msg.Release();
                                 return;
                             }
@@ -101,7 +101,7 @@ namespace Mirror.SimpleWeb
                             // check if connected before sending message
                             if (!client.Connected)
                             {
-                                Log.Verbose("[SWT-SendLoop]: SendLoop {0} not connected", conn);
+                                Log.Verbose($"[SWT-SendLoop]: SendLoop {conn} not connected");
                                 msg.Release();
                                 return;
                             }
@@ -113,11 +113,14 @@ namespace Mirror.SimpleWeb
                     }
                 }
 
-                Log.Verbose("[SWT-SendLoop]: {0} Not Connected", conn);
+                Log.Verbose($"[SWT-SendLoop]: {conn} Not Connected");
             }
             catch (ThreadInterruptedException e) { Log.InfoException(e); }
-            catch (ThreadAbortException) { Log.Error("[SWT-SendLoop]: Thread Abort Exception"); }
-            catch (Exception e) { Log.Exception(e); }
+            catch (ThreadAbortException e) { Log.InfoException(e); }
+            catch (Exception e)
+            {
+                Log.Exception(e);
+            }
             finally
             {
                 Profiler.EndThreadProfiling();

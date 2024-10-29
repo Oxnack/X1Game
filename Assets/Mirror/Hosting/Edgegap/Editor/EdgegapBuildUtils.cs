@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,9 +22,7 @@ namespace Edgegap
 
         public static BuildReport BuildServer()
         {
-            IEnumerable<string> scenes = EditorBuildSettings.scenes
-                .Where(s => s.enabled)
-                .Select(s => s.path);
+            IEnumerable<string> scenes = EditorBuildSettings.scenes.Select(s=>s.path);
             BuildPlayerOptions options = new BuildPlayerOptions
             {
                 scenes = scenes.ToArray(),
@@ -43,11 +40,11 @@ namespace Edgegap
             return BuildPipeline.BuildPlayer(options);
         }
 
-        public static async Task<bool> DockerSetupAndInstallationCheck(string path)
+        public static async Task<bool> DockerSetupAndInstallationCheck()
         {
-            if (!File.Exists(path))
+            if (!File.Exists("Dockerfile"))
             {
-                throw new Exception("Dockerfile not found, please notify plugin maintainer about this issue.");
+                File.WriteAllText("Dockerfile", dockerFileText);
             }
 
             string output = null;
@@ -77,7 +74,7 @@ namespace Edgegap
         }
 
         // MIRROR CHANGE
-        public static async Task RunCommand_DockerBuild(string dockerfilePath, string registry, string imageRepo, string tag, string projectPath, Action<string> onStatusUpdate)
+        public static async Task RunCommand_DockerBuild(string registry, string imageRepo, string tag, Action<string> onStatusUpdate)
         {
             string realErrorMessage = null;
 
@@ -89,11 +86,11 @@ namespace Edgegap
             string buildCommand = IsArmCPU() ? "buildx build --platform linux/amd64" : "build";
 
 #if UNITY_EDITOR_WIN
-            await RunCommand("docker.exe", $"{buildCommand} -f \"{dockerfilePath}\" -t \"{registry}/{imageRepo}:{tag}\" \"{projectPath}\"", onStatusUpdate,
+            await RunCommand("docker.exe", $"{buildCommand} -t {registry}/{imageRepo}:{tag} .", onStatusUpdate,
 #elif UNITY_EDITOR_OSX
-            await RunCommand("/bin/bash", $"-c \"docker {buildCommand} -f {dockerfilePath} -t {registry}/{imageRepo}:{tag} {projectPath}\"", onStatusUpdate,
+            await RunCommand("/bin/bash", $"-c \"docker {buildCommand} -t {registry}/{imageRepo}:{tag} .\"", onStatusUpdate,
 #elif UNITY_EDITOR_LINUX
-            await RunCommand("/bin/bash", $"-c \"docker {buildCommand} -f {dockerfilePath} -t {registry}/{imageRepo}:{tag} {projectPath}\"", onStatusUpdate,
+            await RunCommand("/bin/bash", $"-c \"docker {buildCommand} -t {registry}/{imageRepo}:{tag} .\"", onStatusUpdate,
 #endif
                 (msg) =>
                 {
@@ -220,6 +217,20 @@ namespace Edgegap
            // throw new NotImplementedException();
         }
 
+        // -batchmode -nographics remains for Unity 2019/2020 support pre-dedicated server builds
+        static string dockerFileText = @"FROM ubuntu:bionic
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+COPY Builds/EdgegapServer /root/build/
+
+WORKDIR /root/
+
+RUN chmod +x /root/build/ServerBuild
+
+ENTRYPOINT [ ""/root/build/ServerBuild"", ""-batchmode"", ""-nographics""]
+";
+
         /// <summary>Run a Docker cmd with streaming log response. TODO: Plugin to other Docker cmds</summary>
         /// <returns>Throws if logs contain "ERROR"</returns>
         ///
@@ -285,4 +296,3 @@ namespace Edgegap
 
     }
 }
-#endif

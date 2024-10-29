@@ -9,8 +9,6 @@ namespace Mirror.Transports.Encryption
     [HelpURL("https://mirror-networking.gitbook.io/docs/manual/transports/encryption-transport")]
     public class EncryptionTransport : Transport
     {
-        public override bool IsEncrypted => true;
-        public override string EncryptionCipher => "AES256-GCM";
         public Transport inner;
 
         public enum ValidationMode
@@ -76,9 +74,7 @@ namespace Mirror.Transports.Encryption
             }
         }
 
-        private void HandleInnerServerConnected(int connId) => HandleInnerServerConnected(connId, inner.ServerGetClientAddress(connId));
-
-        private void HandleInnerServerConnected(int connId, string clientRemoteAddress)
+        private void HandleInnerServerConnected(int connId)
         {
             Debug.Log($"[EncryptionTransport] New connection #{connId}");
             EncryptedConnection ec = null;
@@ -91,8 +87,7 @@ namespace Mirror.Transports.Encryption
                 {
                     Debug.Log($"[EncryptionTransport] Connection #{connId} is ready");
                     ServerRemoveFromPending(ec);
-                    //OnServerConnected?.Invoke(connId);
-                    OnServerConnectedWithAddress?.Invoke(connId, clientRemoteAddress);
+                    OnServerConnected?.Invoke(connId);
                 },
                 (type, msg) =>
                 {
@@ -208,10 +203,7 @@ namespace Mirror.Transports.Encryption
             {
                 _credentials = EncryptionCredentials.Generate();
             }
-#pragma warning disable CS0618 // Type or member is obsolete
             inner.OnServerConnected = HandleInnerServerConnected;
-#pragma warning restore CS0618 // Type or member is obsolete
-            inner.OnServerConnectedWithAddress = HandleInnerServerConnected;
             inner.OnServerDataReceived = HandleInnerServerDataReceived;
             inner.OnServerDataSent = (connId, bytes, channel) => OnServerDataSent?.Invoke(connId, bytes, channel);
             inner.OnServerError = HandleInnerServerError;
