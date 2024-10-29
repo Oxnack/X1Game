@@ -1,26 +1,31 @@
 using UnityEngine;
 using Mirror;
-using Org.BouncyCastle.Crypto.Macs;
 
 public class RoboActivate : NetworkBehaviour
 {
-    [SerializeField] private GameObject _robot;
+    [SerializeField] private GameObject _robotPrefab;
 
     public override void OnStartClient()
     {
         base.OnStartClient();
+        string name = PlayerPrefs.GetString("name");
 
-        GameObject robo = Instantiate(_robot);
-        CmdSpawnRobot(robo);
-        robo.GetComponent<PlayerName>().enabled = true;
+        if (isLocalPlayer) 
+        {
+            CmdSpawnRobot(name);
+        }
     }
 
-
     [Command]
-    private void CmdSpawnRobot(GameObject robo)
+    private void CmdSpawnRobot(string name)
     {
+        GameObject robo = Instantiate(_robotPrefab); 
+        NetworkServer.Spawn(robo); 
+
         robo.GetComponent<PlayerName>().enabled = true;
-        NetworkServer.Spawn(robo);
-        Debug.Log("Spawn New Robot");
+
+        robo.GetComponent<PlayerName>().Name = name;
+
+        Debug.Log("Spawn New Robot, with name: " + name);
     }
 }

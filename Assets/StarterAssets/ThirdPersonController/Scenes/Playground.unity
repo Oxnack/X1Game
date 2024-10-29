@@ -2264,7 +2264,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _robot: {fileID: 6530326518842483545, guid: 82d6d7dd63cf942408dc248b5604642f, type: 3}
+  _robotPrefab: {fileID: 6530326518842483545, guid: 82d6d7dd63cf942408dc248b5604642f, type: 3}
 --- !u!1 &1764214107
 GameObject:
   m_ObjectHideFlags: 0
