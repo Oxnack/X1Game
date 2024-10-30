@@ -47,6 +47,9 @@ public class SimpleHttpServer : NetworkBehaviour
     private void ProcessRequest(HttpListenerContext context)
     {
         string responseString = "";
+        context.Request.Headers.Add("Access-Control-Allow-Origin", "*");
+        context.Request.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+        context.Request.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
 
         if (context.Request.HttpMethod == "POST" && context.Request.Url.AbsolutePath == "/api/football")
         {
