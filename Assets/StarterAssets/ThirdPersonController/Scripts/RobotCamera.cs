@@ -6,6 +6,7 @@ public class RobotCamera : MonoBehaviour //On Camera
 {
     private string _name;
     private GameObject _robot = null;
+
     private void OnEnable()
     {
         _name = PlayerPrefs.GetString("name");
@@ -25,9 +26,12 @@ public class RobotCamera : MonoBehaviour //On Camera
 
     private void Update()
     {
+        Quaternion myRotation = Quaternion.identity;
+        myRotation.eulerAngles = new Vector3(20.345f, 43.044f, -2.135f);
         if (_robot != null)
         {
-            gameObject.transform.position = _robot.transform.position + new Vector3(-3, 3, -3);
+            gameObject.transform.position = _robot.transform.position + new Vector3(-6.5f, 5, -7);
+            gameObject.transform.rotation =  myRotation;
         }
     }
 }
