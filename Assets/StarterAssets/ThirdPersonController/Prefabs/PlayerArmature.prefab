@@ -1303,6 +1303,7 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
+  cameraSensitivity: 3
 --- !u!114 &5885216827943657505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1593,6 +1594,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   _robotPrefab: {fileID: 6530326518842483545, guid: 82d6d7dd63cf942408dc248b5604642f, type: 3}
+  _name: 
 --- !u!1 &4523139366846529165
 GameObject:
   m_ObjectHideFlags: 0
