@@ -9,6 +9,7 @@ namespace StarterAssets
         [Header("Output")]
         public StarterAssetsInputs starterAssetsInputs;
 
+        [SerializeField] private float cameraJoystickSensivity = 1f;
 
         public override void OnStartClient()       
         {
@@ -33,6 +34,7 @@ namespace StarterAssets
 
         public void VirtualLookInput(Vector2 virtualLookDirection)
         {
+            virtualLookDirection *= cameraJoystickSensivity;
             starterAssetsInputs.LookInput(virtualLookDirection);
         }
 
